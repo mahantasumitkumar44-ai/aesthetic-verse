@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AestheticVerse - AI Bio, Gamer Tags & Anime Wallpaper</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              50: '#f5f3ff',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans selection:bg-brand-500 selection:text-white">
+
+  <!-- Header / Navbar -->
+  <header class="border-b border-slate-800/80 sticky top-0 bg-slate-950/80 backdrop-blur-md z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-pink-500 flex items-center justify-center font-display font-extrabold text-xl shadow-lg shadow-brand-500/20">
+          ✨
+        </div>
+        <div>
+          <h1 class="font-display font-bold text-lg tracking-wide text-white leading-tight">AestheticVerse</h1>
+          <p class="text-xs text-slate-400">All-in-One AI Aesthetic Suite</p>
+        </div>
+      </div>
+
+      <!-- API Key Modal Trigger -->
+      <div class="flex items-center gap-2">
+        <button id="apiKeyModalBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-xs font-medium text-slate-300 transition">
+          <span class="w-2 h-2 rounded-full" id="apiKeyStatusDot"></span>
+          <span id="apiKeyStatusText">Gemini API Key</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    
+    <!-- Hero Banner -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-pink-400 to-amber-300 mb-3">
+        Level Up Your Digital Aesthetic
+      </h2>
+      <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+        Generate trendy Instagram bios, cool gamer tags, aesthetic captions, aur custom 4K anime wallpapers — bilkul free!
+      </p>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex justify-center mb-8">
+      <div class="bg-slate-900/90 border border-slate-800 p-1.5 rounded-2xl flex flex-wrap justify-center gap-1 shadow-inner">
+        <button onclick="switchTab('bios')" id="tab-bios" class="tab-btn active px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+          <span>📱</span> Instagram Bios
+        </button>
+        <button onclick="switchTab('gamertags')" id="tab-gamertags" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+          <span>🎮</span> Gamer Tags
+        </button>
+        <button onclick="switchTab('captions')" id="tab-captions" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+          <span>📸</span> Captions
+        </button>
+        <button onclick="switchTab('anime')" id="tab-anime" class="tab-btn px-4 py-2 rounded-xl text-sm font-semibold transition flex items-center gap-2">
+          <span>🎨</span> Anime Wallpaper
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab 1: Instagram Bios -->
+    <section id="panel-bios" class="tab-panel max-w-3xl mx-auto">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>✨</span> Instagram Aesthetic Bio Generator
+        </h3>
+        <p class="text-xs text-slate-400 mb-6">Describe yourself, your interests, mood, ya profession.</p>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Aapka Vibe / Profession</label>
+            <input type="text" id="bioPrompt" placeholder="e.g. coffee addict, coder, minimalist wanderer, gym rat" 
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Style / Aesthetic</label>
+              <select id="bioStyle" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="minimalist aesthetic with clean fonts and few emojis">Minimalist & Clean</option>
+                <option value="bold, high-status, attitude and swagger">Attitude & Sigma</option>
+                <option value="cute, soft aesthetic with pastel vibes">Soft & Kawaii</option>
+                <option value="funny, witty, and sarcastic">Funny & Sarcastic</option>
+                <option value="deep, poetic, mysterious dark aesthetic">Dark & Mysterious</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Include Emojis?</label>
+              <select id="bioEmoji" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="stylish matching emojis">Aesthetic Matching Emojis</option>
+                <option value="no emojis, only stylish typography">No Emojis (Typography Only)</option>
+                <option value="japanese symbols and kaomoji">Kaomoji / Japanese Symbols (⋆ ˚｡⋆୨୧˚)</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="generateBios()" id="bioSubmitBtn" class="w-full mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2">
+            <span>Generate Bios</span>
+          </button>
+        </div>
+
+        <!-- Output Cards -->
+        <div id="biosOutput" class="mt-8 space-y-3 hidden"></div>
+      </div>
+    </section>
+
+    <!-- Tab 2: Gamer Tags -->
+    <section id="panel-gamertags" class="tab-panel max-w-3xl mx-auto hidden">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>🎮</span> Cool Gamer Tags & Nicknames
+        </h3>
+        <p class="text-xs text-slate-400 mb-6">Works instantly even without API keys (Smart Generator + AI modes).</p>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Your Base Name / Keyword</label>
+              <input type="text" id="tagKeyword" placeholder="e.g. Shadow, Phoenix, Aryan, Viper" 
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Gaming Genre / Mood</label>
+              <select id="tagGenre" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-3 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="competitive">Competitive FPS / Esports (Valorant, CS2)</option>
+                <option value="clan">Clan / Squad (Mythic, Dark, Glitch)</option>
+                <option value="anime">Anime & Japanese Cyberpunk</option>
+                <option value="chill">Aesthetic / Chill / Lo-fi</option>
+                <option value="toxic">Aggressive / Menacing</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button onclick="generateGamerTags(false)" class="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition active:scale-[0.99] border border-slate-700">
+              ⚡ Instant Generator (Free / No API)
+            </button>
+            <button onclick="generateGamerTags(true)" id="tagAiBtn" class="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm shadow-lg shadow-purple-500/25 transition active:scale-[0.99]">
+              ✨ AI Gemini Boost
+            </button>
+          </div>
+        </div>
+
+        <!-- Output Grid -->
+        <div id="tagsOutput" class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-2.5 hidden"></div>
+      </div>
+    </section>
+
+    <!-- Tab 3: Captions -->
+    <section id="panel-captions" class="tab-panel max-w-3xl mx-auto hidden">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl">
+        <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+          <span>📸</span> Photo Caption & Hashtags Generator
+        </h3>
+        <p class="text-xs text-slate-400 mb-6">Create high-engagement captions tailored for Instagram, Threads, ya Reels.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">What is in your photo?</label>
+            <textarea id="captionContext" rows="3" placeholder="e.g. Sunset at the beach with friends, wearing an all-black street outfit, late night coding desk setup" 
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tone</label>
+              <select id="captionTone" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="aesthetic short one-liners">Short Aesthetic (One-Liner)</option>
+                <option value="deep thoughtful and reflective quote">Thoughtful & Poetic</option>
+                <option value="bold savage and confident attitude">Savage & Attitude</option>
+                <option value="funny relatable hook">Funny & Relatable</option>
+                <option value="hinglish desi vibe">Hinglish / Desi Aesthetic</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Include Hashtags?</label>
+              <select id="captionTags" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="yes, high-reach aesthetic hashtags">Include High-Reach Hashtags</option>
+                <option value="no hashtags">No Hashtags</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="generateCaptions()" id="captionSubmitBtn" class="w-full mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-brand-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2">
+            <span>Generate Captions</span>
+          </button>
+        </div>
+
+        <!-- Captions Output -->
+        <div id="captionsOutput" class="mt-8 space-y-3 hidden"></div>
+      </div>
+    </section>
+
+    <!-- Tab 4: Anime Wallpaper -->
+    <section id="panel-anime" class="tab-panel max-w-3xl mx-auto hidden">
+      <div class="bg-slate-900/70 border border-slate-800 rounded-2xl p-6 sm:p-8 backdrop-blur-sm shadow-xl">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-lg font-bold text-white flex items-center gap-2">
+            <span>🎨</span> Anime Wallpaper Maker
+          </h3>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-full font-medium">100% Free (No API Key Required)</span>
+        </div>
+        <p class="text-xs text-slate-400 mb-6">Powered by Pollinations.ai Flux Model. Free high-res anime wallpapers.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Character / Scene Description</label>
+            <input type="text" id="animePrompt" placeholder="e.g. samurai girl with glowing katana in rainy neo-tokyo alley, studio ghibli cloudscape" 
+              class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 transition" />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Anime Style</label>
+              <select id="animeStyle" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="Makoto Shinkai style, cinematic vibrant lighting, clouds">Makoto Shinkai (Vibrant Skies)</option>
+                <option value="Studio Ghibli aesthetic, hand-drawn, soft pastels">Studio Ghibli (Whimsical)</option>
+                <option value="Cyberpunk anime aesthetic, neon lights, dark moody">Cyberpunk / Neo-Tokyo</option>
+                <option value="Modern dark fantasy anime, glowing runes, epic scene">Dark Fantasy / Shonen</option>
+                <option value="Lo-fi 90s vintage retro anime aesthetic">90s Retro Anime Lo-Fi</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Aspect Ratio</label>
+              <select id="animeRatio" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="phone">Phone Wallpaper (9:16)</option>
+                <option value="desktop">PC / Desktop (16:9)</option>
+                <option value="square">Square / PFP (1:1)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">Enhancements</label>
+              <select id="animeQuality" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-brand-500 transition">
+                <option value="ultra detailed, 4k wallpaper, masterpiece">Masterpiece 4K</option>
+                <option value="minimalist, cinematic depth of field">Cinematic Minimal</option>
+              </select>
+            </div>
+          </div>
+
+          <button onclick="generateAnimeWallpaper()" id="animeSubmitBtn" class="w-full mt-2 py-3 px-6 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white font-semibold text-sm shadow-lg shadow-pink-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2">
+            <span>Generate Wallpaper</span>
+          </button>
+        </div>
+
+        <!-- Wallpaper Result Container -->
+        <div id="wallpaperOutput" class="mt-8 hidden">
+          <div class="relative group rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 flex flex-col items-center">
+            <div id="wallpaperLoading" class="p-12 text-center text-slate-400 text-sm hidden">
+              <div class="inline-block w-8 h-8 border-4 border-pink-500/30 border-t-pink-500 rounded-full animate-spin mb-3"></div>
+              <p>Rendering anime artwork with Pollinations AI...</p>
+            </div>
+            <img id="wallpaperImg" src="" alt="Generated Anime Wallpaper" class="w-full max-h-[600px] object-contain rounded-xl transition duration-300 hidden" />
+            
+            <div id="wallpaperActions" class="p-4 w-full flex flex-wrap gap-3 justify-end bg-slate-900/90 border-t border-slate-800 hidden">
+              <a id="wallpaperDownloadBtn" href="" target="_blank" download="anime_wallpaper.jpg" class="px-4 py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-white font-semibold text-xs transition flex items-center gap-1.5 shadow">
+                <span>⬇️</span> Download HD Image
+              </a>
+              <button onclick="copyWallpaperUrl()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition border border-slate-700">
+                🔗 Copy Image Link
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Gemini API Key Modal -->
+  <div id="apiKeyModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+      <h3 class="text-base font-bold text-white mb-2 flex items-center gap-2">
+        <span>🔑</span> Google Gemini API Key
+      </h3>
+      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+        Instagram bios aur captions generate karne ke liye free Gemini API key lagti hai. Key aapke local browser storage mein hi store rehti hai.
+      </p>
+
+      <div class="space-y-3">
+        <input type="password" id="apiKeyInput" placeholder="AIzaSy..." 
+          class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand-500" />
+        
+        <div class="flex items-center justify-between text-xs">
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-brand-400 hover:underline">
+            Free API Key kahan milegi? ↗
+          </a>
+          <button onclick="clearApiKey()" class="text-rose-400 hover:underline">Key Hatao</button>
+        </div>
+
+        <div class="pt-3 flex gap-2">
+          <button onclick="closeApiKeyModal()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition">
+            Cancel
+          </button>
+          <button onclick="saveApiKey()" class="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white transition shadow-lg shadow-brand-500/25">
+            Save Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-800 border border-slate-700 text-white text-xs px-4 py-3 rounded-xl shadow-2xl transition-all duration-300 transform translate-y-20 opacity-0 z-50 flex items-center gap-2">
+    <span id="toastIcon">✨</span>
+    <span id="toastMessage">Copied to clipboard!</span>
+  </div>
+
+  <!-- Logic & Scripts -->
+  <script>
+    // Tab switching logic
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/25');
+        b.classList.add('text-slate-400', 'hover:text-slate-200');
+      });
+
+      const activePanel = document.getElementById(`panel-${tabName}`);
+      const activeBtn = document.getElementById(`tab-${tabName}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-500/25');
+        activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200');
+      }
+    }
+
+    // Modal & API Key Management
+    const modal = document.getElementById('apiKeyModal');
+    const apiKeyModalBtn = document.getElementById('apiKeyModalBtn');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const statusDot = document.getElementById('apiKeyStatusDot');
+    const statusText = document.getElementById('apiKeyStatusText');
+
+    apiKeyModalBtn.addEventListener('click', () => {
+      apiKeyInput.value = localStorage.getItem('gemini_api_key') || '';
+      modal.classList.remove('hidden');
+    });
+
+    function closeApiKeyModal() {
+      modal.classList.add('hidden');
+    }
+
+    function saveApiKey() {
+      const val = apiKeyInput.value.trim();
+      if (val) {
+        localStorage.setItem('gemini_api_key', val);
+        showToast('API Key saved successfully!');
+      } else {
+        localStorage.removeItem('gemini_api_key');
+      }
+      updateKeyStatus();
+      closeApiKeyModal();
+    }
+
+    function clearApiKey() {
+      localStorage.removeItem('gemini_api_key');
+      apiKeyInput.value = '';
+      updateKeyStatus();
+      showToast('API Key removed!');
+      closeApiKeyModal();
+    }
+
+    function updateKeyStatus() {
+      const key = localStorage.getItem('gemini_api_key');
+      if (key) {
+        statusDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        statusText.innerText = 'Gemini Connected';
+        statusText.className = 'text-xs text-emerald-300 font-medium';
+      } else {
+        statusDot.className = 'w-2 h-2 rounded-full bg-amber-400';
+        statusText.innerText = 'Set Gemini Key (Free)';
+        statusText.className = 'text-xs text-slate-300 font-medium';
+      }
+    }
+
+    function checkApiKey() {
+      const key = localStorage.getItem('gemini_api_key');
+      if (!key) {
+        modal.classList.remove('hidden');
+        showToast('Please enter your free Gemini API key to continue!', '⚠️');
+        return null;
+      }
+      return key;
+    }
+
+    function showToast(msg, icon = '✨') {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').innerText = msg;
+      document.getElementById('toastIcon').innerText = icon;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard!');
+      });
+    }
+
+    // Call Gemini Free API
+    async function callGemini(promptText) {
+      const apiKey = checkApiKey();
+      if (!apiKey) throw new Error('API key missing');
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+          generationConfig: {
+            temperature: 0.85,
+            topK: 40,
+            topP: 0.95
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.error?.message || 'Gemini API Error');
+      }
+
+      const data = await response.json();
+      return data.candidates[0].content.parts[0].text;
+    }
+
+    // 1. Generate Instagram Bios
+    async function generateBios() {
+      const prompt = document.getElementById('bioPrompt').value.trim() || 'Creative Soul';
+      const style = document.getElementById('bioStyle').value;
+      const emoji = document.getElementById('bioEmoji').value;
+      const btn = document.getElementById('bioSubmitBtn');
+      const out = document.getElementById('biosOutput');
+
+      if (!checkApiKey()) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Generating...`;
+
+      const aiPrompt = `Generate 5 aesthetic, stylish, short Instagram bios for someone with these details:
+User details/vibe: "${prompt}"
+Style: "${style}"
+Emoji preference: "${emoji}"
+
+Requirements:
+- Exactly 5 distinct bios.
+- Formatted as a numbered list from 1 to 5.
+- Keep them punchy, aesthetic, and ready to paste into Instagram bio.
+- Do not output markdown asterisks inside the bio lines.`;
+
+      try {
+        const result = await callGemini(aiPrompt);
+        const lines = result.split('\n').filter(l => l.trim().length > 3);
+
+        out.innerHTML = '';
+        lines.slice(0, 5).forEach((line) => {
+          const cleanLine = line.replace(/^\d+[\.\)\-]\s*/, '').trim();
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between gap-4 hover:border-slate-700 transition group';
+          card.innerHTML = `
+            <div class="text-sm font-medium text-slate-200 select-all whitespace-pre-line">${cleanLine}</div>
+            <button class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-brand-600 text-xs text-slate-300 hover:text-white font-medium transition shrink-0">
+              Copy
+            </button>
+          `;
+          card.querySelector('button').addEventListener('click', () => copyToClipboard(cleanLine));
+          out.appendChild(card);
+        });
+        out.classList.remove('hidden');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Generate Bios</span>`;
+      }
+    }
+
+    // 2. Generate Gamer Tags (Local + AI)
+    async function generateGamerTags(useAi) {
+      const keyword = document.getElementById('tagKeyword').value.trim() || 'Viper';
+      const genre = document.getElementById('tagGenre').value;
+      const out = document.getElementById('tagsOutput');
+
+      if (useAi) {
+        if (!checkApiKey()) return;
+        const btn = document.getElementById('tagAiBtn');
+        btn.disabled = true;
+        btn.innerText = 'AI Thinking...';
+
+        const aiPrompt = `Generate 8 cool, aggressive or aesthetic gamer tags/nicknames for a gamer who wants the root keyword "${keyword}" in the style of "${genre}".
+Return only the 8 gamer tags separated by newlines, no numbering or commentary. Include some styled symbols or uppercase/lowercase aesthetic variations.`;
+
+        try {
+          const result = await callGemini(aiPrompt);
+          const tags = result.split('\n').map(t => t.trim()).filter(t => t.length > 0).slice(0, 8);
+          renderTags(tags);
+        } catch (err) {
+          alert('Error: ' + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.innerText = '✨ AI Gemini Boost';
+        }
+      } else {
+        // Free client-side procedural generation without API!
+        const prefixes = ['xX', 'Nova', 'Vortex', 'Phantom', 'Zero', 'Dark', 'Ghost', 'Zen', 'Aero', 'Scythe'];
+        const suffixes = ['Xx', '99', 'FPS', 'God', 'Main', 'ttv', 'GG', 'Vibe', 'Prime', 'Soul'];
+        const styles = [
+          kw => `${kw.toUpperCase()}`,
+          kw => `xX_${kw}_Xx`,
+          kw => `iAm${kw}`,
+          kw => `itz_${kw}`,
+          kw => `${kw}ツ`,
+          kw => `⚡${kw}⚡`,
+          kw => `${kw}.exe`,
+          kw => `v_${kw}`
+        ];
+
+        let generated = [];
+        styles.forEach(fn => generated.push(fn(keyword)));
+        prefixes.slice(0, 4).forEach((p, i) => generated.push(`${p}_${keyword}_${suffixes[i]}`));
+        renderTags(generated.slice(0, 8));
+      }
+    }
+
+    function renderTags(tags) {
+      const out = document.getElementById('tagsOutput');
+      out.innerHTML = '';
+      tags.forEach(tag => {
+        const item = document.createElement('div');
+        item.className = 'p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between hover:border-brand-500/50 transition cursor-pointer group';
+        item.innerHTML = `
+          <span class="font-mono text-sm font-semibold text-slate-200 group-hover:text-brand-400 transition">${tag}</span>
+          <span class="text-xs text-slate-500 group-hover:text-slate-300">📋</span>
+        `;
+        item.addEventListener('click', () => copyToClipboard(tag));
+        out.appendChild(item);
+      });
+      out.classList.remove('hidden');
+    }
+
+    // 3. Generate Captions
+    async function generateCaptions() {
+      const context = document.getElementById('captionContext').value.trim() || 'Golden hour vibes with coffee';
+      const tone = document.getElementById('captionTone').value;
+      const tagsPref = document.getElementById('captionTags').value;
+      const btn = document.getElementById('captionSubmitBtn');
+      const out = document.getElementById('captionsOutput');
+
+      if (!checkApiKey()) return;
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Crafting Captions...`;
+
+      const aiPrompt = `Create 4 high-engagement social media captions for a picture showing: "${context}".
+Tone: "${tone}"
+Hashtag preference: "${tagsPref}"
+
+Format: Provide 4 options. Each option must have the caption and (if requested) 4-6 matching relevant hashtags on the next line. Separate each option with '---'.`;
+
+      try {
+        const result = await callGemini(aiPrompt);
+        const options = result.split('---').map(o => o.trim()).filter(o => o.length > 5);
+
+        out.innerHTML = '';
+        options.slice(0, 4).forEach((captionText) => {
+          const clean = captionText.replace(/^Option \d+:\s*/i, '').trim();
+          const card = document.createElement('div');
+          card.className = 'p-4 rounded-xl bg-slate-950/80 border border-slate-800 flex items-start justify-between gap-4 hover:border-slate-700 transition';
+          card.innerHTML = `
+            <div class="text-sm text-slate-200 whitespace-pre-line">${clean}</div>
+            <button class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-brand-600 text-xs text-slate-300 hover:text-white font-medium transition shrink-0 mt-0.5">
+              Copy
+            </button>
+          `;
+          card.querySelector('button').addEventListener('click', () => copyToClipboard(clean));
+          out.appendChild(card);
+        });
+        out.classList.remove('hidden');
+      } catch (err) {
+        alert('Error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>Generate Captions</span>`;
+      }
+    }
+
+    // 4. Generate Anime Wallpaper using Pollinations (100% Free & No Key)
+    let currentWallpaperUrl = '';
+
+    function generateAnimeWallpaper() {
+      const userPrompt = document.getElementById('animePrompt').value.trim() || 'cyberpunk anime girl in rain';
+      const style = document.getElementById('animeStyle').value;
+      const ratio = document.getElementById('animeRatio').value;
+      const quality = document.getElementById('animeQuality').value;
+
+      let width = 1080;
+      let height = 1920;
+      if (ratio === 'desktop') {
+        width = 1920;
+        height = 1080;
+      } else if (ratio === 'square') {
+        width = 1024;
+        height = 1024;
+      }
+
+      const fullPrompt = `${userPrompt}, ${style}, ${quality}, anime aesthetic wallpaper, high resolution`;
+      const encodedPrompt = encodeURIComponent(fullPrompt);
+      const seed = Math.floor(Math.random() * 999999);
+      
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=${width}&height=${height}&seed=${seed}&nologo=true&model=flux`;
+      currentWallpaperUrl = imageUrl;
+
+      const outputContainer = document.getElementById('wallpaperOutput');
+      const loading = document.getElementById('wallpaperLoading');
+      const img = document.getElementById('wallpaperImg');
+      const actions = document.getElementById('wallpaperActions');
+      const downloadBtn = document.getElementById('wallpaperDownloadBtn');
+
+      outputContainer.classList.remove('hidden');
+      loading.classList.remove('hidden');
+      img.classList.add('hidden');
+      actions.classList.add('hidden');
+
+      img.onload = () => {
+        loading.classList.add('hidden');
+        img.classList.remove('hidden');
+        actions.classList.remove('hidden');
+        downloadBtn.href = imageUrl;
+      };
+
+      img.onerror = () => {
+        loading.innerHTML = `<p class="text-rose-400">Failed to generate image. Please try again.</p>`;
+      };
+
+      img.src = imageUrl;
+    }
+
+    function copyWallpaperUrl() {
+      if (currentWallpaperUrl) {
+        copyToClipboard(currentWallpaperUrl);
+      }
+    }
+
+    // Initialize state on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      switchTab('bios');
+      updateKeyStatus();
+    });
+  </script>
+</body>
+</html>
